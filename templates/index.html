@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NumWords - Number to Words Converter</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #222;
+        }
+
+        /* HEADER */
+        .header {
+            background: #172554;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 6px;
+        }
+
+        .header p {
+            color: #cbd5e1;
+        }
+
+        /* MAIN CONTAINER */
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            margin: 30px auto;
+        }
+
+        /* STATUS CARDS */
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .stat-card {
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            color: #64748b;
+            margin-bottom: 10px;
+        }
+
+        .stat-card h2 {
+            font-size: 30px;
+            color: #172554;
+        }
+
+        .connected {
+            color: #16a34a !important;
+        }
+
+        /* CONVERTER */
+        .converter {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .converter h2 {
+            color: #172554;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 80%;
+            max-width: 450px;
+            padding: 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 18px;
+            text-align: center;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #2563eb;
+        }
+
+        .convert-btn {
+            display: block;
+            margin: 18px auto;
+            padding: 13px 35px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .convert-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* RESULT */
+        .result {
+            margin-top: 20px;
+            background: #eff6ff;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .result p {
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .result h3 {
+            color: #172554;
+            line-height: 1.5;
+        }
+
+        /* HISTORY */
+        .history h2 {
+            color: #172554;
+            margin-bottom: 20px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #172554;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        .empty {
+            text-align: center;
+            color: #64748b;
+        }
+
+        /* CLEAR BUTTON */
+        .clear-form {
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        .clear-btn {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .clear-btn:hover {
+            background: #b91c1c;
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+        }
+
+        @media (max-width: 600px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 25px;
+            }
+
+            input {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+    <!-- HEADER -->
+    <div class="header">
+        <h1>🔢 NumWords</h1>
+        <p>Number to Words Converter</p>
+    </div>
+
+
+    <div class="container">
+
+        <!-- STATUS -->
+        <div class="stats">
+
+            <div class="card stat-card">
+                <h3>Total Conversions</h3>
+                <h2>{{ total }}</h2>
+            </div>
+
+            <div class="card stat-card">
+                <h3>Database Status</h3>
+                <h2 class="connected">● Connected</h2>
+            </div>
+
+        </div>
+
+
+        <!-- CONVERTER -->
+        <div class="card converter">
+
+            <h2>Convert Number to Words</h2>
+
+            <form method="POST" action="/">
+
+                <input
+                    type="number"
+                    name="number"
+                    placeholder="Enter a number"
+                    required
+                >
+
+                <button
+                    type="submit"
+                    class="convert-btn">
+                    Convert
+                </button>
+
+            </form>
+
+
+            {% if result %}
+
+            <div class="result">
+
+                <p>Number in Words</p>
+
+                <h3>{{ result }}</h3>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- HISTORY -->
+        <div class="card history">
+
+            <h2>Conversion History</h2>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Number</th>
+                            <th>Number in Words</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for row in history %}
+
+                        <tr>
+                            <td>{{ row[0] }}</td>
+                            <td>{{ row[1] }}</td>
+                            <td>{{ row[2] }}</td>
+                        </tr>
+
+                        {% else %}
+
+                        <tr>
+                            <td colspan="3" class="empty">
+                                No conversions yet
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            {% if history %}
+
+            <form
+                method="POST"
+                action="/clear"
+                class="clear-form"
+                onsubmit="return confirm('Clear all conversion history?');">
+
+                <button
+                    type="submit"
+                    class="clear-btn">
+                    Clear History
+                </button>
+
+            </form>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <footer>
+        NumWords • Python • Flask • MySQL
+    </footer>
+
+</body>
+
+</html>
